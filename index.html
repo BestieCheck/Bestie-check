@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bestie Check 💗</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:20px;min-height:100vh;
+ display:flex;justify-content:center;align-items:center;
+ font-family:Arial,sans-serif;color:#39263f;
+ background:linear-gradient(135deg,#ffe0ed,#e7dcff);
+}
+.card{
+ width:100%;max-width:560px;background:white;padding:25px;
+ border-radius:24px;box-shadow:0 12px 40px #8f659329;
+}
+h1{text-align:center;color:#df4787;margin-bottom:5px}
+.sub{text-align:center;color:#806d85;line-height:1.5}
+h2{color:#d83f82}
+label{display:block;font-weight:bold;margin:12px 0 8px}
+input,select{
+ width:100%;padding:12px;border:1px solid #e6d0e4;
+ border-radius:10px;font-size:15px;background:#fffaff;
+}
+button{
+ width:100%;padding:13px;border:0;border-radius:12px;
+ background:#e84d91;color:white;font-size:16px;
+ font-weight:bold;cursor:pointer;margin-top:16px;
+}
+button:hover{background:#c93677}
+.question{
+ padding:13px;background:#fff4f9;border-radius:12px;margin:13px 0;
+}
+.question label{margin-top:0;line-height:1.4}
+.round{color:#d83f82;margin-top:22px}
+.hidden{display:none}
+.small{text-align:center;color:#806d85;font-size:13px}
+.result{text-align:center;margin-top:20px;overflow-wrap:anywhere}
+.score{font-size:48px;font-weight:bold;color:#df4787}
+</style>
+</head>
+<body>
+<main class="card">
+<h1>💗 Bestie Check</h1>
+<p class="sub">Do your friends REALLY know you?<br>
+Take the quiz. Expose your besties. 👀</p>
+
+<section id="setup">
+<label>Your name</label>
+<input id="owner" maxlength="40" placeholder="Enter your name">
+
+<p class="small">Choose the answer that describes YOU best.</p>
+<div id="ownerQuestions"></div>
+<button onclick="createQuiz()">Create My Quiz 🔗</button>
+</section>
+
+<section id="share" class="hidden">
+<h2>🎉 Your quiz is ready!</h2>
+<p>Send this challenge to your friends and see who knows you best.</p>
+<input id="shareLink" readonly>
+<button onclick="shareWhatsApp()">📲 Challenge Friends on WhatsApp</button>
+<p class="small">Anyone with your link can take the quiz.</p>
+</section>
+
+<section id="play" class="hidden">
+<h2 id="quizTitle"></h2>
+<p class="sub">Let's see if you're a real bestie! 💕</p>
+<label>Your name or nickname</label>
+<input id="friend" maxlength="40" placeholder="Enter your name">
+<div id="friendQuestions"></div>
+<button onclick="submitQuiz()">Reveal My Score 💌</button>
+<div id="result" class="result"></div>
+</section>
+</main>
+
+<script>
+const questions=[
+{q:"What's my biggest red flag?",a:["Overthinking everything","Getting angry quickly","Trusting people too easily","Ignoring messages"]},
+{q:"What instantly changes my mood?",a:["Good food","A sweet message","My favourite song","A surprise plan"]},
+{q:"What's my biggest weakness when I like someone?",a:["I overthink every text","I act like I don't care","I tell my bestie everything","I smile at my phone"]},
+{q:"What do I do when I'm jealous?",a:["I go quiet","I ask too many questions","I pretend I'm fine","It shows on my face"]},
+{q:"What's one thing I can never say no to?",a:["Food","Shopping","A late-night talk","A fun trip"]},
+{q:"If I suddenly go quiet in the group chat, why?",a:["I'm busy","I'm overthinking","I'm annoyed","I fell asleep"]},
+{q:"What's most likely to make me angry?",a:["Being ignored","Lies","Broken promises","Someone touching my food"]},
+{q:"What would I do if I became rich tomorrow?",a:["Travel the world","Buy things I love","Help my family","Disappear for a luxury holiday"]},
+{q:"Which role am I in our friend group?",a:["The therapist","The comedian","The detective","The troublemaker"]},
+{q:"What's the most 'me' thing I would do?",a:["Overthink a tiny thing","Laugh at the wrong time","Give advice I don't follow","Make random plans"]},
+{q:"What kind of person can win my heart?",a:["Someone funny","Someone caring","Someone honest","Someone who understands me"]},
+{q:"When I'm upset, what do I usually want?",a:["Advice","Comfort and a hug","Some space","Someone to listen"]},
+{q:"What's something I'm secretly sensitive about?",a:["My appearance","Being left out","My future","What people think of me"]},
+{q:"If I call someone at 2 a.m., what might I need?",a:["Someone to listen","Help with a problem","A random gossip session","Food recommendations"]},
+{q:"What's one thing I would never forgive easily?",a:["Betrayal","Repeated lying","Breaking my trust","Sharing my secrets"]}
+];
+
+function questionHTML(prefix,creator){
+ return questions.map((item,i)=>`
+ <div class="question">
+ ${i===0?'<h3 class="round">💕 Round 1: Know Me</h3>':''}
+ ${i===5?'<h3 class="round">😂 Round 2: Expose Me</h3>':''}
+ ${i===10?'<h3 class="round">👀 Round 3: Bestie Secrets</h3>':''}
+ <label>${i+1}. ${item.q}</label>
+ <select id="${prefix}${i}">
+ <option value="">Choose your answer</option>
+ ${item.a.map((a,j)=>`<option value="${j}">${a}</option>`).join("")}
+ </select>
+ </div>`).join("");
+}
+
+document.getElementById("ownerQuestions").innerHTML=questionHTML("correct",true);
+
+function createQuiz(){
+ const owner=document.getElementById("owner").value.trim();
+ if(!owner){alert("Enter your name first!");return;}
+ const answers=questions.map((q,i)=>document.getElementById("correct"+i).value);
+ if(answers.some(a=>a==="")){alert("Please answer all 15 questions!");return;}
+
+ const quiz={owner,answers};
+ const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(quiz))));
+ const url=new URL(location.href);
+ url.searchParams.set("quiz",encoded);
+
+ document.getElementById("shareLink").value=url.href;
+ document.getElementById("setup").classList.add("hidden");
+ document.getElementById("share").classList.remove("hidden");
+ window.scrollTo(0,0);
+}
+
+function loadQuiz(){
+ const encoded=new URLSearchParams(location.search).get("quiz");
+ if(!encoded)return;
+ try{
+  const quiz=JSON.parse(decodeURIComponent(escape(atob(encoded))));
+  if(!quiz.owner||!Array.isArray(quiz.answers)||quiz.answers.length!==questions.length)return;
+  window.currentQuiz=quiz;
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("share").classList.add("hidden");
+  document.getElementById("play").classList.remove("hidden");
+  document.getElementById("quizTitle").textContent="How well do you know "+quiz.owner+"? 💕";
+  document.getElementById("friendQuestions").innerHTML=questionHTML("answer",false);
+ }catch(e){}
+}
+
+function submitQuiz(){
+ const name=document.getElementById("friend").value.trim();
+ if(!name){alert("Enter your name first!");return;}
+ const answers=questions.map((q,i)=>document.getElementById("answer"+i).value);
+ if(answers.some(a=>a==="")){alert("Answer all 15 questions to reveal your score!");return;}
+ const score=answers.reduce((total,a,i)=>total+(a===String(window.currentQuiz.answers[i])?1:0),0);
+ let title,message;
+ if(score===15){title="👑 THE SOULMATE BESTIE";message="You know them better than anyone!";}
+ else if(score>=12){title="💖 CERTIFIED BESTIE";message="You two are seriously connected!";}
+ else if(score>=8){title="🥰 CLOSE FRIEND ENERGY";message="You know them pretty well!";}
+ else if(score>=4){title="😂 CASUAL FRIEND";message="Time for more bestie conversations!";}
+ else{title="🚨 STRANGER ALERT";message="Bestie, do you even know them?!";}
+ document.getElementById("result").innerHTML=
+ `<div class="score">${score}/15</div><h2>${title}</h2><p>${message}</p>
+ <p>${name}, challenge your friends to beat your score!</p>
+ <button onclick="shareWhatsApp()">📲 Share the Challenge</button>`;
+}
+
+function shareWhatsApp(){
+ const link=document.getElementById("shareLink").value||location.href;
+ const message="💗 I challenge you! Take my Bestie Check quiz and prove how well you know me 👀💕 "+link;
+ window.open("https://wa.me/?text="+encodeURIComponent(message),"_blank");
+}
+loadQuiz();
+</script>
+</body>
+</html>
