@@ -5,167 +5,392 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bestie Check 💗</title>
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;padding:20px;min-height:100vh;
- display:flex;justify-content:center;align-items:center;
- font-family:Arial,sans-serif;color:#39263f;
- background:linear-gradient(135deg,#ffe0ed,#e7dcff);
+:root {
+  --pink: #ff4f91;
+  --light: #fff0f6;
+  --purple: #9b5de5;
+  --ink: #45243a;
 }
-.card{
- width:100%;max-width:560px;background:white;padding:25px;
- border-radius:24px;box-shadow:0 12px 40px #8f659329;
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%, #ffe0ec 0 8%, transparent 9%),
+    radial-gradient(circle at 90% 25%, #f1dcff 0 7%, transparent 8%),
+    linear-gradient(135deg, #fff4f8, #ffe1ed 55%, #f5e8ff);
+  min-height: 100vh;
 }
-h1{text-align:center;color:#df4787;margin-bottom:5px}
-.sub{text-align:center;color:#806d85;line-height:1.5}
-h2{color:#d83f82}
-label{display:block;font-weight:bold;margin:12px 0 8px}
-input,select{
- width:100%;padding:12px;border:1px solid #e6d0e4;
- border-radius:10px;font-size:15px;background:#fffaff;
+header { text-align: center; padding: 30px 15px 12px; }
+.logo { font-size: 2.6rem; }
+h1 {
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  margin: 4px 0;
+  color: #e93680;
+  text-shadow: 2px 3px 0 white;
 }
-button{
- width:100%;padding:13px;border:0;border-radius:12px;
- background:#e84d91;color:white;font-size:16px;
- font-weight:bold;cursor:pointer;margin-top:16px;
+.subtitle { margin: 8px auto; max-width: 550px; line-height: 1.5; }
+.sticker {
+  display: inline-block;
+  background: white;
+  border: 2px solid #ffd0e2;
+  border-radius: 18px;
+  padding: 9px 13px;
+  margin: 5px;
+  box-shadow: 0 5px 0 #f5b8d1;
+  transform: rotate(-3deg);
 }
-button:hover{background:#c93677}
-.question{
- padding:13px;background:#fff4f9;border-radius:12px;margin:13px 0;
+.sticker:nth-child(even) { transform: rotate(3deg); }
+main { width: min(760px, 92%); margin: 12px auto 45px; }
+.card {
+  background: rgba(255,255,255,.94);
+  border: 2px solid #ffc4dc;
+  border-radius: 25px;
+  padding: clamp(16px, 4vw, 28px);
+  margin: 18px 0;
+  box-shadow: 0 9px 0 #f6c1d8, 0 14px 28px #d77ba322;
 }
-.question label{margin-top:0;line-height:1.4}
-.round{color:#d83f82;margin-top:22px}
-.hidden{display:none}
-.small{text-align:center;color:#806d85;font-size:13px}
-.result{text-align:center;margin-top:20px;overflow-wrap:anywhere}
-.score{font-size:48px;font-weight:bold;color:#df4787}
+h2 { margin-top: 0; color: #d8327a; }
+label { display: block; font-weight: bold; margin: 12px 0 6px; }
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #f3c5d9;
+  border-radius: 12px;
+  background: #fffafd;
+  color: var(--ink);
+  font: inherit;
+}
+input:focus, select:focus { outline: 3px solid #f9c0dc; }
+.question-editor {
+  background: #fff5fa;
+  border: 1px dashed #eaa2c3;
+  border-radius: 17px;
+  padding: 14px;
+  margin: 15px 0;
+}
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+button {
+  border: 0;
+  border-radius: 14px;
+  padding: 13px 17px;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform .15s, filter .15s;
+}
+button:hover { transform: translateY(-2px); filter: brightness(1.03); }
+.primary {
+  background: linear-gradient(135deg, #ff4f91, #e83e86);
+  color: white;
+  box-shadow: 0 5px 0 #c52c6d;
+}
+.secondary { background: #f0e1ff; color: #6c35a2; }
+.whatsapp { background: #d7f8df; color: #176b39; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.full { width: 100%; margin-top: 15px; }
+.small { font-size: .88rem; color: #80566e; line-height: 1.5; }
+.question-card {
+  border: 2px solid #f7c8dc;
+  border-radius: 18px;
+  padding: 15px;
+  margin: 15px 0;
+  background: #fff8fb;
+}
+.answer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px;
+  border: 1px solid #f1c4d8;
+  border-radius: 12px;
+  margin: 8px 0;
+  cursor: pointer;
+  background: white;
+}
+.answer:has(input:checked) {
+  border-color: #ed4388;
+  background: #ffedf5;
+}
+.answer input { width: auto; accent-color: #ed4388; }
+.result { text-align: center; }
+.big-emoji { font-size: 4rem; }
+.score { font-size: 2.4rem; color: #df337c; font-weight: bold; }
+.hidden { display: none !important; }
+footer { text-align: center; padding: 15px; color: #8e6680; }
 </style>
 </head>
 <body>
-<main class="card">
-<h1>💗 Bestie Check</h1>
-<p class="sub">Do your friends REALLY know you?<br>
-Take the quiz. Expose your besties. 👀</p>
+<header>
+  <div class="logo">💗 🐸 💗</div>
+  <h1>Bestie Check!</h1>
+  <p class="subtitle">Are you my REAL bestie… or just here for the gossip? 😂</p>
+  <div class="sticker">✨ Bestie energy</div>
+  <div class="sticker">😭 No fake friends</div>
+  <div class="sticker">🫶 Friendship test</div>
+</header>
 
-<section id="setup">
-<label>Your name</label>
-<input id="owner" maxlength="40" placeholder="Enter your name">
+<main>
+  <section id="creator" class="card">
+    <h2>🎀 Create your bestie quiz</h2>
+    <p class="small">Add your name, write funny questions, fill in four possible answers, and select the correct answer. Then send your quiz link to your friends!</p>
 
-<p class="small">Choose the answer that describes YOU best.</p>
-<div id="ownerQuestions"></div>
-<button onclick="createQuiz()">Create My Quiz 🔗</button>
-</section>
+    <label for="owner">Your name or nickname</label>
+    <input id="owner" maxlength="35" placeholder="e.g. Pinky 💗">
 
-<section id="share" class="hidden">
-<h2>🎉 Your quiz is ready!</h2>
-<p>Send this challenge to your friends and see who knows you best.</p>
-<input id="shareLink" readonly>
-<button onclick="shareWhatsApp()">📲 Challenge Friends on WhatsApp</button>
-<p class="small">Anyone with your link can take the quiz.</p>
-</section>
+    <div id="editor"></div>
 
-<section id="play" class="hidden">
-<h2 id="quizTitle"></h2>
-<p class="sub">Let's see if you're a real bestie! 💕</p>
-<label>Your name or nickname</label>
-<input id="friend" maxlength="40" placeholder="Enter your name">
-<div id="friendQuestions"></div>
-<button onclick="submitQuiz()">Reveal My Score 💌</button>
-<div id="result" class="result"></div>
-</section>
+    <button class="primary full" id="createBtn">🔗 Create my quiz link</button>
+    <p class="small">Tip: make the questions personal and funny so your friends have to think! 😂</p>
+    <div id="linkArea" class="hidden">
+      <label for="shareLink">Your quiz link</label>
+      <input id="shareLink" readonly>
+      <button class="secondary full" id="copyBtn">📋 Copy link</button>
+      <button class="whatsapp full" id="shareBtn">📲 Share on WhatsApp</button>
+      <p id="linkMessage" class="small" role="status"></p>
+    </div>
+  </section>
+
+  <section id="quiz" class="card hidden">
+    <h2 id="quizTitle">💌 Bestie quiz</h2>
+    <p id="quizIntro" class="small"></p>
+    <label for="friendName">Your name or nickname</label>
+    <input id="friendName" maxlength="35" placeholder="e.g. Secret Bestie">
+    <form id="quizForm">
+      <div id="quizQuestions"></div>
+      <button class="primary full" type="submit">💖 Reveal my bestie score!</button>
+    </form>
+  </section>
+
+  <section id="result" class="card result hidden">
+    <div id="resultEmoji" class="big-emoji">💗</div>
+    <h2 id="resultTitle">Your result</h2>
+    <div id="resultScore" class="score"></div>
+    <p id="resultText"></p>
+    <button id="resultShare" class="whatsapp full">📲 Share my result</button>
+    <button id="tryAgain" class="secondary full">🔄 Try again</button>
+  </section>
 </main>
 
+<footer>Made with 💗, memes & bestie drama 😂</footer>
+
 <script>
-const questions=[
-{q:"What's my biggest red flag?",a:["Overthinking everything","Getting angry quickly","Trusting people too easily","Ignoring messages"]},
-{q:"What instantly changes my mood?",a:["Good food","A sweet message","My favourite song","A surprise plan"]},
-{q:"What's my biggest weakness when I like someone?",a:["I overthink every text","I act like I don't care","I tell my bestie everything","I smile at my phone"]},
-{q:"What do I do when I'm jealous?",a:["I go quiet","I ask too many questions","I pretend I'm fine","It shows on my face"]},
-{q:"What's one thing I can never say no to?",a:["Food","Shopping","A late-night talk","A fun trip"]},
-{q:"If I suddenly go quiet in the group chat, why?",a:["I'm busy","I'm overthinking","I'm annoyed","I fell asleep"]},
-{q:"What's most likely to make me angry?",a:["Being ignored","Lies","Broken promises","Someone touching my food"]},
-{q:"What would I do if I became rich tomorrow?",a:["Travel the world","Buy things I love","Help my family","Disappear for a luxury holiday"]},
-{q:"Which role am I in our friend group?",a:["The therapist","The comedian","The detective","The troublemaker"]},
-{q:"What's the most 'me' thing I would do?",a:["Overthink a tiny thing","Laugh at the wrong time","Give advice I don't follow","Make random plans"]},
-{q:"What kind of person can win my heart?",a:["Someone funny","Someone caring","Someone honest","Someone who understands me"]},
-{q:"When I'm upset, what do I usually want?",a:["Advice","Comfort and a hug","Some space","Someone to listen"]},
-{q:"What's something I'm secretly sensitive about?",a:["My appearance","Being left out","My future","What people think of me"]},
-{q:"If I call someone at 2 a.m., what might I need?",a:["Someone to listen","Help with a problem","A random gossip session","Food recommendations"]},
-{q:"What's one thing I would never forgive easily?",a:["Betrayal","Repeated lying","Breaking my trust","Sharing my secrets"]}
+const defaults = [
+  {
+    q: "What's my biggest weakness? 😭",
+    options: ["Overthinking everything 🤯", "Food 🍕", "My crush 👀", "Sleeping all day 😴"],
+    correct: 0
+  },
+  {
+    q: 'When I say "I am fine", what does it mean? 🥲',
+    options: ["I need snacks 🍟", "I want to talk 😭", "Nothing is wrong 😌", "Please read my mind 🧠"],
+    correct: 3
+  },
+  {
+    q: "What would I choose on a free day? 🎀",
+    options: ["Go on an adventure 🌈", "Sleep forever 😴", "Eat everything 🍜", "Gossip with my bestie ☕"],
+    correct: 3
+  },
+  {
+    q: "What role do I play in our friend group? 😂",
+    options: ["The therapist 🫶", "The comedian 🤡", "The planner 📋", "The walking disaster 💀"],
+    correct: 1
+  },
+  {
+    q: "What makes me happiest? 💗",
+    options: ["Money 💸", "Food 🍰", "Time with my people 🥹", "All of the above 😎"],
+    correct: 2
+  }
 ];
 
-function questionHTML(prefix,creator){
- return questions.map((item,i)=>`
- <div class="question">
- ${i===0?'<h3 class="round">💕 Round 1: Know Me</h3>':''}
- ${i===5?'<h3 class="round">😂 Round 2: Expose Me</h3>':''}
- ${i===10?'<h3 class="round">👀 Round 3: Bestie Secrets</h3>':''}
- <label>${i+1}. ${item.q}</label>
- <select id="${prefix}${i}">
- <option value="">Choose your answer</option>
- ${item.a.map((a,j)=>`<option value="${j}">${a}</option>`).join("")}
- </select>
- </div>`).join("");
+const editor = document.getElementById("editor");
+const creator = document.getElementById("creator");
+const quiz = document.getElementById("quiz");
+const result = document.getElementById("result");
+let activeQuiz = null;
+let lastScore = 0;
+let lastFriend = "";
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[c]);
 }
 
-document.getElementById("ownerQuestions").innerHTML=questionHTML("correct",true);
+function renderEditor() {
+  editor.innerHTML = defaults.map((item, i) => `
+    <div class="question-editor">
+      <label for="q${i}">Question ${i + 1}</label>
+      <input id="q${i}" maxlength="120" value="${escapeHTML(item.q)}">
+      <label>Four possible answers</label>
+      <div class="options-grid">
+        ${item.options.map((option, j) => `
+          <input id="q${i}o${j}" maxlength="65" aria-label="Question ${i + 1}, answer ${j + 1}" value="${escapeHTML(option)}">
+        `).join("")}
+      </div>
+      <label for="correct${i}">Which answer is correct?</label>
+      <select id="correct${i}">
+        ${item.options.map((option, j) => `
+          <option value="${j}" ${j === item.correct ? "selected" : ""}>Answer ${j + 1}: ${escapeHTML(option)}</option>
+        `).join("")}
+      </select>
+    </div>
+  `).join("");
 
-function createQuiz(){
- const owner=document.getElementById("owner").value.trim();
- if(!owner){alert("Enter your name first!");return;}
- const answers=questions.map((q,i)=>document.getElementById("correct"+i).value);
- if(answers.some(a=>a==="")){alert("Please answer all 15 questions!");return;}
-
- const quiz={owner,answers};
- const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(quiz))));
- const url=new URL(location.href);
- url.searchParams.set("quiz",encoded);
-
- document.getElementById("shareLink").value=url.href;
- document.getElementById("setup").classList.add("hidden");
- document.getElementById("share").classList.remove("hidden");
- window.scrollTo(0,0);
+  defaults.forEach((item, i) => {
+    for (let j = 0; j < 4; j++) {
+      document.getElementById(`q${i}o${j}`).addEventListener("input", () => {
+        const select = document.getElementById(`correct${i}`);
+        const previous = select.value;
+        select.innerHTML = item.options.map((_, k) => `
+          <option value="${k}" ${String(k) === previous ? "selected" : ""}>
+            Answer ${k + 1}: ${escapeHTML(document.getElementById(`q${i}o${k}`).value)}
+          </option>
+        `).join("");
+      });
+    }
+  });
 }
 
-function loadQuiz(){
- const encoded=new URLSearchParams(location.search).get("quiz");
- if(!encoded)return;
- try{
-  const quiz=JSON.parse(decodeURIComponent(escape(atob(encoded))));
-  if(!quiz.owner||!Array.isArray(quiz.answers)||quiz.answers.length!==questions.length)return;
-  window.currentQuiz=quiz;
-  document.getElementById("setup").classList.add("hidden");
-  document.getElementById("share").classList.add("hidden");
-  document.getElementById("play").classList.remove("hidden");
-  document.getElementById("quizTitle").textContent="How well do you know "+quiz.owner+"? 💕";
-  document.getElementById("friendQuestions").innerHTML=questionHTML("answer",false);
- }catch(e){}
+function readEditor() {
+  return defaults.map((_, i) => ({
+    q: document.getElementById(`q${i}`).value.trim(),
+    options: [0,1,2,3].map(j => document.getElementById(`q${i}o${j}`).value.trim()),
+    correct: Number(document.getElementById(`correct${i}`).value)
+  }));
 }
 
-function submitQuiz(){
- const name=document.getElementById("friend").value.trim();
- if(!name){alert("Enter your name first!");return;}
- const answers=questions.map((q,i)=>document.getElementById("answer"+i).value);
- if(answers.some(a=>a==="")){alert("Answer all 15 questions to reveal your score!");return;}
- const score=answers.reduce((total,a,i)=>total+(a===String(window.currentQuiz.answers[i])?1:0),0);
- let title,message;
- if(score===15){title="👑 THE SOULMATE BESTIE";message="You know them better than anyone!";}
- else if(score>=12){title="💖 CERTIFIED BESTIE";message="You two are seriously connected!";}
- else if(score>=8){title="🥰 CLOSE FRIEND ENERGY";message="You know them pretty well!";}
- else if(score>=4){title="😂 CASUAL FRIEND";message="Time for more bestie conversations!";}
- else{title="🚨 STRANGER ALERT";message="Bestie, do you even know them?!";}
- document.getElementById("result").innerHTML=
- `<div class="score">${score}/15</div><h2>${title}</h2><p>${message}</p>
- <p>${name}, challenge your friends to beat your score!</p>
- <button onclick="shareWhatsApp()">📲 Share the Challenge</button>`;
+function validQuiz(data) {
+  return data && typeof data.owner === "string" &&
+    Array.isArray(data.questions) && data.questions.length === 5 &&
+    data.questions.every(q =>
+      typeof q.q === "string" && q.q.length <= 120 &&
+      Array.isArray(q.options) && q.options.length === 4 &&
+      q.options.every(o => typeof o === "string" && o.length <= 65) &&
+      Number.isInteger(q.correct) && q.correct >= 0 && q.correct < 4
+    );
 }
 
-function shareWhatsApp(){
- const link=document.getElementById("shareLink").value||location.href;
- const message="💗 I challenge you! Take my Bestie Check quiz and prove how well you know me 👀💕 "+link;
- window.open("https://wa.me/?text="+encodeURIComponent(message),"_blank");
+function showQuiz(data) {
+  activeQuiz = data;
+  creator.classList.add("hidden");
+  result.classList.add("hidden");
+  quiz.classList.remove("hidden");
+  document.getElementById("quizTitle").textContent = `💌 How well do you know ${data.owner}?`;
+  document.getElementById("quizIntro").textContent =
+    "No cheating, bestie! Pick one answer for every question. 😂";
+  document.getElementById("quizQuestions").innerHTML = data.questions.map((q, i) => `
+    <div class="question-card">
+      <strong>${i + 1}. ${escapeHTML(q.q)}</strong>
+      ${q.options.map((option, j) => `
+        <label class="answer">
+          <input type="radio" name="answer${i}" value="${j}" required>
+          <span>${escapeHTML(option)}</span>
+        </label>
+      `).join("")}
+    </div>
+  `).join("");
 }
-loadQuiz();
+
+document.getElementById("createBtn").addEventListener("click", () => {
+  const owner = document.getElementById("owner").value.trim();
+  const questions = readEditor();
+  if (!owner) {
+    alert("Enter your name or nickname first! 💗");
+    return;
+  }
+  if (questions.some(q => !q.q || q.options.some(o => !o))) {
+    alert("Please fill in every question and answer. 🎀");
+    return;
+  }
+
+  const data = { owner, questions };
+  const shareURL = location.href.split("#")[0] +
+    "#quiz=" + encodeURIComponent(JSON.stringify(data));
+
+  document.getElementById("shareLink").value = shareURL;
+  document.getElementById("linkArea").classList.remove("hidden");
+  document.getElementById("linkMessage").textContent =
+    "Your link is ready! Open it in another tab to test it.";
+  document.getElementById("shareBtn").onclick = () => {
+    const message = `😂 I made a Bestie Check quiz! How well do you know me? Try it here: ${shareURL}`;
+    location.href = "https://wa.me/?text=" + encodeURIComponent(message);
+  };
+});
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const field = document.getElementById("shareLink");
+  try {
+    await navigator.clipboard.writeText(field.value);
+    document.getElementById("linkMessage").textContent = "Copied! Now paste it into WhatsApp 💗";
+  } catch {
+    field.select();
+    document.execCommand("copy");
+    document.getElementById("linkMessage").textContent = "Select and copy the link, then paste it into WhatsApp 💗";
+  }
+});
+
+document.getElementById("quizForm").addEventListener("submit", event => {
+  event.preventDefault();
+  if (!activeQuiz) return;
+
+  const friend = document.getElementById("friendName").value.trim();
+  if (!friend) {
+    alert("Enter your name first! 😎");
+    return;
+  }
+  let score = 0;
+  activeQuiz.questions.forEach((q, i) => {
+    const answer = document.querySelector(`input[name="answer${i}"]:checked`);
+    if (answer && Number(answer.value) === q.correct) score++;
+  });
+
+  lastScore = score;
+  lastFriend = friend;
+  quiz.classList.add("hidden");
+  result.classList.remove("hidden");
+
+  const outcomes = [
+    ["💀", "Who even are you?", "Bestie status: under investigation. Go spend more time together! 😂"],
+    ["🥲", "We need to talk!", "You know a little… but the friendship exam was tough!"],
+    ["👀", "Getting there!", "Not bad! You have potential, bestie."],
+    ["💗", "Certified Bestie!", "Okayyy, you actually know them pretty well! 🫶"],
+    ["👑", "SOULMATE BESTIE!", "Are you two sharing one brain cell? Perfect score! 😂💖"]
+  ];
+  const outcome = outcomes[score];
+  document.getElementById("resultEmoji").textContent = outcome[0];
+  document.getElementById("resultTitle").textContent = outcome[1];
+  document.getElementById("resultScore").textContent = `${score}/5`;
+  document.getElementById("resultText").textContent = outcome[2];
+
+  document.getElementById("resultShare").onclick = () => {
+    const message = `😂 I scored ${score}/5 on ${activeQuiz.owner}'s Bestie Check! ${outcome[1]} Can you beat my score? ${location.href}`;
+    location.href = "https://wa.me/?text=" + encodeURIComponent(message);
+  };
+});
+
+document.getElementById("tryAgain").addEventListener("click", () => {
+  document.getElementById("friendName").value = "";
+  document.getElementById("quizForm").reset();
+  result.classList.add("hidden");
+  quiz.classList.remove("hidden");
+});
+
+renderEditor();
+
+if (location.hash.startsWith("#quiz=")) {
+  try {
+    const data = JSON.parse(decodeURIComponent(location.hash.slice(6)));
+    if (validQuiz(data)) {
+      showQuiz(data);
+    } else {
+      alert("This quiz link is invalid. Ask your friend to create a new one.");
+    }
+  } catch {
+    alert("We couldn't open this quiz link. Ask your friend to share it again.");
+  }
+}
 </script>
 </body>
 </html>
